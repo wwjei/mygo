@@ -27,7 +27,9 @@ type ChildWebViewOptions struct {
 type ChildWebViewState struct {
 	// URL is the address the web view was created with.
 	URL string
-	// Status is "loading", "loaded", "error" or "gone".
+	// Status is "loading", "loaded", "error", "gone" or "popup": the page
+	// asked for a window of its own, whose address is CurrentURL, which
+	// the app opens elsewhere.
 	Status string
 	// CurrentURL is the page's address, which differs from URL after the
 	// page navigates.

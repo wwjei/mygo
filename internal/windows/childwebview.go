@@ -101,8 +101,13 @@ func (v *childWebView) setUp() {
 	add(wvAddNavigationCompleted, v.navigationCompleted)
 	add(wvAddProcessFailed, v.processFailed)
 	add(wvAddNewWindowRequested, func(_, args uintptr) {
-		// A popup would be a window of its own, outside the pane: cancel it.
+		// A popup would be a window of its own, outside the pane: the app
+		// opens its address elsewhere, as with other external links.
+		var p uintptr
+		comCall(args, newWinGetURI, uintptr(unsafe.Pointer(&p)))
+		uri := takeWstr(p)
 		comCall(args, newWinPutHandled, 1)
+		v.emit("popup", uri, "", "")
 	})
 
 	v.SetRect(v.opts.Rect)
